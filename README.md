@@ -1,7 +1,9 @@
+
 # Оглавление
 
- - [Что это?](#what)
- - [Как начать?](#start)
+-  [Что это?](#what)
+-  [Как начать?](#start)
+-  [Команды Gulp](#gulp)
 
 # <a id="what" /> Что это?
 
@@ -13,30 +15,62 @@
 
 ### Клонирование репозитория
 
-    $ git clone https://github.com/rybkinevg/nkohub-template.git
+$ git clone https://github.com/rybkinevg/nkohub-template.git
 
 > для доступа по **HTTPS**
 
-    $ git clone git@github.com:rybkinevg/nkohub-template.git
+$ git clone git@github.com:rybkinevg/nkohub-template.git
 
 > для доступа по **SSH**
 
 ### Обновление репозитория
 
-    $ git pull
+$ git pull
 
 ### Внесение изменений в репозиторий
 
-    $ git add .
-    $ git commit -m "[что было сделано]"
-    $ git push
+$ git add .
+
+$ git commit -m "[что было сделано]"
+
+$ git push
 
 ### Создание новой ветки в инициализированном репозитории
 
-    $ git checkout -b [название ветки]
+$ git checkout -b [название ветки]
 
 ### Объединение веток
 
-    $ git checkout [название ветки в которую нужно объединить]
-    $ git merge [название ветки которую нужно слить с текущей]
-    $ git push
+$ git checkout [название ветки в которую нужно объединить]
+
+$ git merge [название ветки которую нужно слить с текущей]
+
+$ git push
+
+# <a id="gulp" /> Команды Gulp
+
+Ниже будет список команд Gulp для запуска сборки
+
+### Разработка
+
+Команда для запуска сборки для разработки
+
+    $ gulp
+
+### Продакшн
+
+Команда для запуска сборки для продакшена, включает в себя минификацию скриптов, стилей, картинок
+
+    $ gulp build
+
+### Кэш
+
+???
+
+    $ gulp cache
+
+### Выгрузка на хостинг
+
+Команда для выгрузки продакшен сборки на хостинг
+
+    $ gulp deploy
