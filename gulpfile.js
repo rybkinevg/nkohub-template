@@ -48,8 +48,8 @@ const generatePath = (dev, build, sub = null) => {
     path.buildName = build;
 
     // Путь до папок
-    path.dev = `./${dev}`;
-    path.build = `./${build}`;
+    path.dev = `./${path.devName}`;
+    path.build = `./${path.buildName}`;
     path.sub = (sub !== null) ? (`/${sub}`) : '';
 
     // Стили
@@ -96,8 +96,8 @@ const generatePath = (dev, build, sub = null) => {
     return path;
 }
 
-// Вызов генератора путей, нужно передать папку разработки, папку сборки, подпапку (необязательно)
-const path = generatePath('src', 'app', 'assets');
+// Вызов генератора путей, нужно передать папку разработки, папку сборки, подпапку
+const path = generatePath('dist', 'app', 'assets');
 
 // Ключ с сайта https://tinypng.com/
 const tinyPngKey = 'JNys0cXzYPDKxZspFvlGV2CGM4GN2xnf';
