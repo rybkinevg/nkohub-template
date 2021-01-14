@@ -22,44 +22,170 @@ const revRewrite = require('gulp-rev-rewrite');
 const revdel = require('gulp-rev-delete-original');
 const htmlmin = require('gulp-htmlmin');
 
-// DEV
-//svg sprite
-const svgSprites = () => {
-    return src('./src/img/svg/**.svg')
-        .pipe(svgSprite({
-            mode: {
-                stack: {
-                    sprite: "../sprite.svg" //sprite file name
-                }
-            },
-        }))
-        .pipe(dest('./app/img'));
+/**
+ * Генерация путей до файлов
+ */
+
+/**
+ * Функция генерации путей
+ *
+ * @param dev (название папки исходников)
+ * @param build (название папки сборки)
+ * @param sub = undefined (название подпапки в исходниках)
+ * @return объект с выстроенными путями
+ */
+
+const generatePath = (dev, build, sub = null) => {
+
+    const path = {
+        src: {},
+        dest: {},
+        watch: {}
+    };
+
+    console.log(sub);
+
+    // Названия папок
+    path.devName = dev;
+    path.buildName = build;
+
+    // Путь до папок
+    path.dev = `./${dev}`;
+    path.build = `./${build}`;
+    path.sub = (sub !== null) ? (`/${sub}`) : '';
+
+    // Стили
+    path.src.styles = path.dev + path.sub + '/sass/**/*.sass';
+    path.dest.styles = path.build + path.sub + '/css/';
+    path.watch.styles = path.src.styles;
+
+    // Скрипты
+    path.src.scripts = path.dev + path.sub + '/js/main.js';
+    path.dest.scripts = path.build + path.sub + '/js/';
+    path.watch.scripts = path.dev + path.sub + '/js/**/*.js';
+
+    // Ресурсы
+    path.src.resources = path.dev + '/resources/**';
+    path.dest.resources = path.build;
+    path.watch.resources = path.src.resources;
+
+    // Разметка
+    path.src.html = path.dev + '/*.html';
+    path.dest.html = path.build;
+    path.watch.htmlTemplates = path.dev + '/html/*.html';
+    path.watch.html = path.src.html;
+
+    // Шрифты
+    path.src.fonts = path.dev + path.sub + '/fonts/**.ttf';
+    path.src.fontsSassFile = path.dev + path.sub + '/sass/_fonts.sass';
+    path.dest.fonts = path.build + path.sub + '/fonts/';
+    path.watch.fonts = path.dev + path.sub + '/fonts/**';
+
+    // Картинки
+    path.src.img = [
+        `${path.dev}${path.sub}/img/**.jpg`,
+        `${path.dev}${path.sub}/img/**.png`,
+        `${path.dev}${path.sub}/img/**.jpeg`
+    ];
+    path.dest.img = path.build + path.sub + '/img/';
+    path.watch.img = path.src.img;
+
+    // SVG
+    path.src.svg = path.dev + path.sub + '/img/svg/**.svg';
+    path.dest.svg = path.build + path.sub + '/img/';
+    path.watch.svg = path.src.svg;
+
+    return path;
 }
 
-const resources = () => {
-    return src('./src/resources/**')
-        .pipe(dest('./app'))
-}
+// Вызов генератора путей, нужно передать папку разработки, папку сборки, подпапку (необязательно)
+const path = generatePath('src', 'app', 'assets');
 
-const imgToApp = () => {
-    return src(['./src/img/**.jpg', './src/img/**.png', './src/img/**.jpeg', './src/img/*.svg'])
-        .pipe(dest('./app/img'))
-}
+// Ключ с сайта https://tinypng.com/
+const tinyPngKey;
 
+/**
+ * DEV сборка
+ */
+
+// Разметка
 const htmlInclude = () => {
-    return src(['./src/*.html'])
+    return src(path.src.html)
         .pipe(fileinclude({
             prefix: '@',
             basepath: '@file'
         }))
-        .pipe(dest('./app'))
+        .pipe(dest(path.dest.html))
         .pipe(browserSync.stream());
 }
 
+// Стили
+const styles = () => {
+    return src(path.src.styles)
+        .pipe(sourcemaps.init())
+        .pipe(sass({
+            outputStyle: 'expanded'
+        }).on("error", notify.onError()))
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(autoprefixer({
+            cascade: false,
+        }))
+        .pipe(cleanCSS({
+            level: 2
+        }))
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest(path.dest.styles))
+        .pipe(browserSync.stream());
+}
+
+// Скрипты
+const scripts = () => {
+    return src(path.src.scripts)
+        .pipe(webpackStream(
+            {
+                mode: 'development',
+                output: {
+                    filename: 'main.js',
+                },
+                module: {
+                    rules: [{
+                        test: /\.m?js$/,
+                        exclude: /(node_modules|bower_components)/,
+                        use: {
+                            loader: 'babel-loader',
+                            options: {
+                                presets: ['@babel/preset-env']
+                            }
+                        }
+                    }]
+                },
+            }
+        ))
+        .on('error', function (err) {
+            console.error('WEBPACK ERROR', err);
+            this.emit('end'); // Don't stop the rest of the task
+        })
+
+        .pipe(sourcemaps.init())
+        .pipe(uglify().on("error", notify.onError()))
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest(path.dest.scripts))
+        .pipe(browserSync.stream());
+}
+
+// Ресурсы
+const resources = () => {
+    return src(path.src.resources)
+        .pipe(dest(path.dest.resources))
+}
+
+// Шрифты
 const fonts = () => {
-    return src('./src/fonts/**.ttf')
+    return src(path.src.fonts)
         .pipe(ttf2woff2())
-        .pipe(dest('./app/fonts/'));
+        .pipe(dest(path.dest.fonts));
 }
 
 const checkWeight = (fontname) => {
@@ -106,14 +232,11 @@ const checkWeight = (fontname) => {
 
 const cb = () => { }
 
-let srcFonts = './src/scss/_fonts.scss';
-let appFonts = './app/fonts/';
-
 const fontsStyle = (done) => {
-    let file_content = fs.readFileSync(srcFonts);
+    let file_content = fs.readFileSync(path.src.fontsSassFile);
 
-    fs.writeFile(srcFonts, '', cb);
-    fs.readdir(appFonts, function (err, items) {
+    fs.writeFile(path.src.fontsSassFile, '', cb);
+    fs.readdir(path.dest.fonts, function (err, items) {
         if (items) {
             let c_fontname;
             for (var i = 0; i < items.length; i++) {
@@ -123,7 +246,7 @@ const fontsStyle = (done) => {
                 let weight = checkWeight(fontname);
 
                 if (c_fontname != fontname) {
-                    fs.appendFile(srcFonts, '@include font-face("' + font + '", "' + fontname + '", ' + weight + ');\r\n', cb);
+                    fs.appendFile(path.src.fontsSassFile, '@include font-face("' + font + '", "' + fontname + '", ' + weight + ');\r\n', cb);
                 }
                 c_fontname = fontname;
             }
@@ -133,9 +256,71 @@ const fontsStyle = (done) => {
     done();
 }
 
-const styles = () => {
-    return src('./src/scss/**/*.scss')
-        .pipe(sourcemaps.init())
+// SVG
+const svgSprites = () => {
+    return src(path.src.svg)
+        .pipe(svgSprite({
+            mode: {
+                stack: {
+                    sprite: "../sprite.svg" //sprite file name
+                }
+            },
+        }))
+        .pipe(dest(path.dest.svg));
+}
+
+// Картинки
+const imgToApp = () => {
+    return src(path.src.img)
+        .pipe(dest(path.dest.img))
+}
+
+// Смотритель
+const watchFiles = () => {
+    browserSync.init({
+        server: {
+            baseDir: path.dest.build
+        },
+    });
+
+    watch(path.watch.styles, styles);
+    watch(path.watch.scripts, scripts);
+    watch(path.watch.htmlTemplates, htmlInclude);
+    watch(path.watch.html, htmlInclude);
+    watch(path.watch.resources, resources);
+    watch(path.watch.img[0], imgToApp);
+    watch(path.watch.img[1], imgToApp);
+    watch(path.watch.img[2], imgToApp);
+    watch(path.watch.svg, svgSprites);
+    watch(path.watch.fonts, fonts);
+    watch(path.watch.fonts, fontsStyle);
+}
+
+// Удаление продакш каталога
+const clean = () => {
+    return del(path.dest.build)
+}
+
+/**
+ * BUILD сборка
+ */
+
+// Минификация картинок
+const tinypng = () => {
+    return src(path.src.img)
+        .pipe(tiny({
+            key: tinyPngKey,
+            sigFile: `${path.dest.img}.tinypng-sigs`,
+            parallel: true,
+            parallelMax: 50,
+            log: true,
+        }))
+        .pipe(dest(path.dest.img))
+}
+
+// Продакшен стили
+const stylesBuild = () => {
+    return src(path.src.styles)
         .pipe(sass({
             outputStyle: 'expanded'
         }).on("error", notify.onError()))
@@ -148,13 +333,12 @@ const styles = () => {
         .pipe(cleanCSS({
             level: 2
         }))
-        .pipe(sourcemaps.write('.'))
-        .pipe(dest('./app/css/'))
-        .pipe(browserSync.stream());
+        .pipe(dest(path.dest.styles))
 }
 
-const scripts = () => {
-    return src('./src/js/main.js')
+// Продакшен скрипты
+const scriptsBuild = () => {
+    return src(path.src.scripts)
         .pipe(webpackStream(
             {
                 mode: 'development',
@@ -179,142 +363,43 @@ const scripts = () => {
             console.error('WEBPACK ERROR', err);
             this.emit('end'); // Don't stop the rest of the task
         })
-
-        .pipe(sourcemaps.init())
         .pipe(uglify().on("error", notify.onError()))
-        .pipe(sourcemaps.write('.'))
-        .pipe(dest('./app/js'))
-        .pipe(browserSync.stream());
+        .pipe(dest(path.dest.scripts))
 }
 
-const watchFiles = () => {
-    browserSync.init({
-        server: {
-            baseDir: "./app"
-        },
-    });
-
-    watch('./src/scss/**/*.scss', styles);
-    watch('./src/js/**/*.js', scripts);
-    watch('./src/html/*.html', htmlInclude);
-    watch('./src/*.html', htmlInclude);
-    watch('./src/resources/**', resources);
-    watch('./src/img/**.jpg', imgToApp);
-    watch('./src/img/**.jpeg', imgToApp);
-    watch('./src/img/**.png', imgToApp);
-    watch('./src/img/svg/**.svg', svgSprites);
-    watch('./src/fonts/**', fonts);
-    watch('./src/fonts/**', fontsStyle);
-}
-
-const clean = () => {
-    return del(['app/*'])
-}
-
-exports.fileinclude = htmlInclude;
-exports.styles = styles;
-exports.scripts = scripts;
-exports.watchFiles = watchFiles;
-exports.fonts = fonts;
-exports.fontsStyle = fontsStyle;
-
-exports.default = series(clean, parallel(htmlInclude, scripts, fonts, resources, imgToApp, svgSprites), fontsStyle, styles, watchFiles);
-
-// BUILD
-const tinypng = () => {
-    return src(['./src/img/**.jpg', './src/img/**.png', './src/img/**.jpeg'])
-        .pipe(tiny({
-            key: 'HkdjDW01hVL5Db6HXSYlnHMk9HCvQfDT',
-            sigFile: './app/img/.tinypng-sigs',
-            parallel: true,
-            parallelMax: 50,
-            log: true,
-        }))
-        .pipe(dest('./app/img'))
-}
-
-const stylesBuild = () => {
-    return src('./src/scss/**/*.scss')
-        .pipe(sass({
-            outputStyle: 'expanded'
-        }).on("error", notify.onError()))
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(autoprefixer({
-            cascade: false,
-        }))
-        .pipe(cleanCSS({
-            level: 2
-        }))
-        .pipe(dest('./app/css/'))
-}
-
-const scriptsBuild = () => {
-    return src('./src/js/main.js')
-        .pipe(webpackStream(
-
-            {
-                mode: 'development',
-                output: {
-                    filename: 'main.js',
-                },
-                module: {
-                    rules: [{
-                        test: /\.m?js$/,
-                        exclude: /(node_modules|bower_components)/,
-                        use: {
-                            loader: 'babel-loader',
-                            options: {
-                                presets: ['@babel/preset-env']
-                            }
-                        }
-                    }]
-                },
-            }))
-        .on('error', function (err) {
-            console.error('WEBPACK ERROR', err);
-            this.emit('end'); // Don't stop the rest of the task
-        })
-        .pipe(uglify().on("error", notify.onError()))
-        .pipe(dest('./app/js'))
-}
-
+// Кэш суффикс
 const cache = () => {
-    return src('app/**/*.{css,js,svg,png,jpg,jpeg,woff2}', {
-        base: 'app'
+    return src(path.build + '/**/*.{css,js,svg,png,jpg,jpeg,woff2}', {
+        base: path.build
     })
         .pipe(rev())
         .pipe(revdel())
-        .pipe(dest('app'))
+        .pipe(dest(path.build))
         .pipe(rev.manifest('rev.json'))
-        .pipe(dest('app'));
+        .pipe(dest(path.build));
 };
 
+// Перезапись файлов с кэш суффиксом
 const rewrite = () => {
-    const manifest = src('app/rev.json');
+    const manifest = src(path.build + '/rev.json');
 
-    return src('app/**/*.html')
+    return src(path.build + '/**/*.html')
         .pipe(revRewrite({
             manifest
         }))
-        .pipe(dest('app'));
+        .pipe(dest(path.build));
 }
 
+// Минификация разметки
 const htmlMinify = () => {
-    return src('app/**/*.html')
+    return src(path.build + '/**/*.html')
         .pipe(htmlmin({
             collapseWhitespace: true
         }))
-        .pipe(dest('app'));
+        .pipe(dest(path.build));
 }
 
-exports.cache = series(cache, rewrite);
-
-exports.build = series(clean, parallel(htmlInclude, scriptsBuild, fonts, resources, imgToApp, svgSprites), fontsStyle, stylesBuild, htmlMinify, tinypng);
-
-
-// deploy
+// Выгрузка на хостинг
 const deploy = () => {
     let conn = ftp.create({
         host: '',
@@ -325,15 +410,37 @@ const deploy = () => {
     });
 
     let globs = [
-        'app/**',
+        path.build + '/**',
     ];
 
     return src(globs, {
-        base: './app',
+        base: path.build,
         buffer: false
     })
         .pipe(conn.newer('')) // only upload newer files
         .pipe(conn.dest(''));
 }
 
+// Экспорт всех функций для доступа к каждой из терминала
+exports.fileinclude = htmlInclude;
+exports.styles = styles;
+exports.scripts = scripts;
+exports.watchFiles = watchFiles;
+exports.fonts = fonts;
+exports.fontsStyle = fontsStyle;
+
+/**
+ * Основные задачи
+ */
+
+// gulp
+exports.default = series(clean, parallel(htmlInclude, scripts, fonts, resources, imgToApp, svgSprites), fontsStyle, styles, watchFiles);
+
+// gulp build
+exports.build = series(clean, parallel(htmlInclude, scriptsBuild, fonts, resources, imgToApp, svgSprites), fontsStyle, stylesBuild, htmlMinify, tinypng); // htmlMinify (минификация разметки) можно вызвать перед "tinypng", если надо
+
+// gulp cache
+exports.cache = series(cache, rewrite);
+
+// gulp deploy
 exports.deploy = deploy;
