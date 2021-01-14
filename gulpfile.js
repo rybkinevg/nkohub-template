@@ -43,8 +43,6 @@ const generatePath = (dev, build, sub = null) => {
         watch: {}
     };
 
-    console.log(sub);
-
     // Названия папок
     path.devName = dev;
     path.buildName = build;
@@ -102,7 +100,7 @@ const generatePath = (dev, build, sub = null) => {
 const path = generatePath('src', 'app', 'assets');
 
 // Ключ с сайта https://tinypng.com/
-const tinyPngKey = '';
+const tinyPngKey = 'JNys0cXzYPDKxZspFvlGV2CGM4GN2xnf';
 
 /**
  * DEV сборка
@@ -285,8 +283,8 @@ const watchFiles = () => {
 
     watch(path.watch.styles, styles);
     watch(path.watch.scripts, scripts);
-    watch(path.watch.htmlTemplates, htmlInclude);
     watch(path.watch.html, htmlInclude);
+    watch(path.watch.htmlTemplates, htmlInclude);
     watch(path.watch.resources, resources);
     watch(path.watch.img[0], imgToApp);
     watch(path.watch.img[1], imgToApp);
@@ -428,6 +426,7 @@ exports.scripts = scripts;
 exports.watchFiles = watchFiles;
 exports.fonts = fonts;
 exports.fontsStyle = fontsStyle;
+exports.clean = clean;
 
 /**
  * Основные задачи
@@ -437,7 +436,7 @@ exports.fontsStyle = fontsStyle;
 exports.default = series(clean, parallel(htmlInclude, scripts, fonts, resources, imgToApp, svgSprites), fontsStyle, styles, watchFiles);
 
 // gulp build
-exports.build = series(clean, parallel(htmlInclude, scriptsBuild, fonts, resources, imgToApp, svgSprites), fontsStyle, stylesBuild, htmlMinify, tinypng); // htmlMinify (минификация разметки) можно вызвать перед "tinypng", если надо
+exports.build = series(clean, parallel(htmlInclude, scriptsBuild, fonts, resources, imgToApp, svgSprites), fontsStyle, stylesBuild, tinypng); // htmlMinify (минификация разметки) можно вызвать перед "tinypng", если надо
 
 // gulp cache
 exports.cache = series(cache, rewrite);
