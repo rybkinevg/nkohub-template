@@ -102,7 +102,7 @@ const generatePath = (dev, build, sub = null) => {
 const path = generatePath('src', 'app', 'assets');
 
 // Ключ с сайта https://tinypng.com/
-const tinyPngKey;
+const tinyPngKey = '';
 
 /**
  * DEV сборка
@@ -279,7 +279,7 @@ const imgToApp = () => {
 const watchFiles = () => {
     browserSync.init({
         server: {
-            baseDir: path.dest.build
+            baseDir: path.build
         },
     });
 
@@ -298,7 +298,7 @@ const watchFiles = () => {
 
 // Удаление продакш каталога
 const clean = () => {
-    return del(path.dest.build)
+    return del(path.build)
 }
 
 /**
