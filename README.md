@@ -15,37 +15,37 @@
 
 ### Клонирование репозитория
 
-$ git clone https://github.com/rybkinevg/nkohub-template.git
+    $ git clone https://github.com/rybkinevg/nkohub-template.git
 
 > для доступа по **HTTPS**
 
-$ git clone git@github.com:rybkinevg/nkohub-template.git
+    $ git clone git@github.com:rybkinevg/nkohub-template.git
 
 > для доступа по **SSH**
 
 ### Обновление репозитория
 
-$ git pull
+    $ git pull
 
 ### Внесение изменений в репозиторий
 
-$ git add .
+    $ git add .
 
-$ git commit -m "[что было сделано]"
+    $ git commit -m "[что было сделано]"
 
-$ git push
+    $ git push
 
 ### Создание новой ветки в инициализированном репозитории
 
-$ git checkout -b [название ветки]
+    $ git checkout -b [название ветки]
 
 ### Объединение веток
 
-$ git checkout [название ветки в которую нужно объединить]
+    $ git checkout [название ветки в которую нужно объединить]
 
-$ git merge [название ветки которую нужно слить с текущей]
+    $ git merge [название ветки которую нужно слить с текущей]
 
-$ git push
+    $ git push
 
 # <a id="gulp" /> Команды Gulp
 
