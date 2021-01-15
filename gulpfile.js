@@ -70,7 +70,7 @@ const generatePath = (dev, build, sub = null) => {
     // Разметка
     path.src.html = path.dev + '/*.html';
     path.dest.html = path.build;
-    path.watch.htmlTemplates = path.dev + '/html/*.html';
+    path.watch.htmlTemplates = path.dev + '/html/**/*.html';
     path.watch.html = path.src.html;
 
     // Шрифты

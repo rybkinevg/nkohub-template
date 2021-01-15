@@ -13,9 +13,16 @@
 
 <body>
     <div class="site-container">
-        @include('html/header.html')
-        @include('html/footer.html')
-        <!-- @include('html/h1.html') пример инклуда -->
+        <div class="site-wrapper">
+            @include('html/header.html')
+            <main>
+                @include('html/index/section-stats.html')
+                @include('html/index/section-about.html')
+                @include('html/index/section-grants.html')
+                @include('html/index/section-news.html')
+            </main>
+            @include('html/footer.html')
+        </div>
     </div>
     <script src="./assets/js/main.js"></script>
 </body>

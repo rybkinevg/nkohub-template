@@ -1,8 +1,9 @@
-//@import "vars"
-@import "mixins"
-@import "fonts"
 @import "vendor"
-@import "settings"
+
+@import "./componets/_header"
+@import "./componets/_section"
+
+@import "./componets/index/_section-about"
 
 // CUSTOM COMPONENTS STYLES
 // .burger {
@@ -13,5 +14,41 @@
 //   @include burger;
 // }
 
+h1,h2,h3,h4,h5,h6
+    margin-top: 0
+
+.test-img
+    height: 250px
+    background-image: url('../img/header.jpg')
+    background-size: cover
+    background-position: center
+    outline: 1px solid grey
+
+html
+    box-sizing: border-box
+
+*,
+*::before,
+*::after
+    box-sizing: inherit
+
 body
-    background-color: white
+    margin: 0
+    font-family: "asd", sans-serif
+    background-color: var(--color-white)
+
+img
+    max-width: 100%
+
+a
+    text-decoration: none
+
+ul
+    list-style: none
+    padding: 0
+
+.site-container
+    overflow: hidden
+
+.site-wrapper
+    padding-left: 60px
