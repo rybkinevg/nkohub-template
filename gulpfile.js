@@ -436,7 +436,10 @@ exports.clean = clean;
 exports.default = series(clean, parallel(htmlInclude, scripts, fonts, resources, imgToApp, svgSprites), fontsStyle, styles, watchFiles);
 
 // gulp build
-exports.build = series(clean, parallel(htmlInclude, scriptsBuild, fonts, resources, imgToApp, svgSprites), fontsStyle, stylesBuild, tinypng); // htmlMinify (минификация разметки) можно вызвать перед "tinypng", если надо
+exports.build = series(clean, parallel(htmlInclude, scriptsBuild, fonts, resources, imgToApp, svgSprites), fontsStyle, stylesBuild);
+
+// gulp fullbuild
+exports.fullbuild = series(clean, parallel(htmlInclude, scriptsBuild, fonts, resources, imgToApp, svgSprites), fontsStyle, stylesBuild, htmlMinify, tinypng);
 
 // gulp cache
 exports.cache = series(cache, rewrite);
