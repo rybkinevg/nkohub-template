@@ -140,15 +140,15 @@
 
     nkohub-template
     │
-    ├── app
-    ├─┬ dist
-    │ ├─┬ assets
-    │ │ ├── fonts
-    │ │ ├─┬ img
-    │ │ │ └─ svg
-    │ │ ├── js
-    │ │ └── sass
-    │ ├── html
-    │ ├── resources
-    │ └── index.html
-    └── node_modules
+    ├─── app
+    ├─┬─ dist
+    │ ├─┬─ assets
+    │ │ ├─── fonts
+    │ │ ├─┬─ img
+    │ │ │ └── svg
+    │ │ ├─── js
+    │ │ └─── sass
+    │ ├─── html
+    │ ├─── resources
+    │ └─── index.html
+    └─── node_modules
