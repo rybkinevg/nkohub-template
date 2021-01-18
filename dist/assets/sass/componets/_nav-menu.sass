@@ -25,8 +25,13 @@
         transition: transform 0.3s ease-in
         overflow: auto
 
+    &__title
+        color: $light-text-color
+
     &__meta
         background-color: $light-light-grey
+        color: $light-text-color
+        padding: 30px
 
     &.open-menu
 
@@ -38,6 +43,9 @@
 
         & .nav-trigger__text-close
             display: inline
+
+    &__post
+        height: 100%
 
 .nav-trigger
     background: transparent
