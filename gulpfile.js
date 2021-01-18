@@ -97,7 +97,7 @@ const generatePath = (dev, build, sub = null) => {
 }
 
 // Вызов генератора путей, нужно передать папку разработки, папку сборки, подпапку
-const path = generatePath('dist', 'app', 'assets');
+const path = generatePath('dist', 'docs', 'assets');
 
 // Ключ с сайта https://tinypng.com/
 const tinyPngKey = 'JNys0cXzYPDKxZspFvlGV2CGM4GN2xnf';
