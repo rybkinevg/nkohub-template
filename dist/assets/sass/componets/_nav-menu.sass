@@ -1,0 +1,56 @@
+.nav-menu
+    position: relative
+    z-index: $z_menu
+
+    &__sidenav
+        position: fixed
+        top: 0
+        left: 0
+        width: $sidenav-width
+        height: 100vh
+        background-color: $dark-grey
+        z-index: $z_burger
+
+    &__content
+        position: fixed
+        top: 0
+        left: 0
+        display: flex
+        flex-direction: column
+        width: 100%
+        height: 100vh
+        padding: 60px 0 60px $sidenav-width
+        background-color: $light-grey
+        transform: translateX(-100%)
+        transition: transform 0.5s ease-in
+        overflow: auto
+
+    &__meta
+        background-color: $light-light-grey
+
+    &.open-menu
+
+        & .nav-menu__content
+            transform: translateX(0)
+
+        & .nav-trigger__text
+            display: none
+
+        & .nav-trigger__text-close
+            display: inline
+
+.nav-trigger
+    background: transparent
+    border: none
+    outline: none
+    height: 100%
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    margin: 0 auto
+    cursor: pointer
+    min-height: 400px
+
+    &__text-close
+        display: none

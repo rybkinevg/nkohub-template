@@ -1,5 +1,9 @@
 @import "vendor"
 
+@import "./_vars"
+@import "./mixins/_font-face"
+@import "./_fonts"
+@import "./componets/_nav-menu"
 @import "./componets/_header"
 @import "./componets/_section"
 
@@ -32,23 +36,45 @@ html
 *::after
     box-sizing: inherit
 
-body
-    margin: 0
-    font-family: "asd", sans-serif
-    background-color: var(--color-white)
-
 img
     max-width: 100%
 
-a
-    text-decoration: none
-
-ul
+.ul-reset
     list-style: none
     padding: 0
+
+.body
+    background-color: $bg-color
+    color: $dark-text-color
+    font-family: $font
+
+    &.fix
+        overflow: hidden
+
+.link
+    color: inherit
+    text-decoration: none
+
+    &-accent
+        color: $accent-color
+
+    &-usual
+        color: $usual-color
+
+.btn
+
+    &-reset
+        border: none
+        background: transparent
+        cursor: pointer
+
+    &-accent
+        color: $accent-color
 
 .site-container
     overflow: hidden
 
 .site-wrapper
-    padding-left: 60px
+    padding-left: $sidenav-width
+
+@import "./_media"
