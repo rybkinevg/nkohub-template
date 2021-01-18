@@ -19,7 +19,9 @@
         <button class="nav-trigger btn-reset btn-accent">
             <span class="nav-trigger__text">Menu</span>
             <span class="nav-trigger__text-close">Close</span>
-            <span class="nav-trigger__burger">123</span>
+            <span class="nav-trigger__burger burger">
+                <span class="burger__line"></span>
+            </span>
         </button>
     </div>
     <div class="nav-menu__content">
@@ -94,10 +96,29 @@
     <div class="section__inner">
         <div class="container">
             <h2 class="section__title">
-                Статистика
+                Наша деятельность в цифрах
             </h2>
             <div class="section__content stats__content">
-                столько то НКО уже присоединилось, столько то чего-то там и чего-то там
+                <div class="row -cols-3">
+                    <div class="col">
+                        <div class="stats__item">
+                            <span class="stats__num">1</span>
+                            <span class="stats__text">База НКО</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stats__item">
+                            <span class="stats__num">20</span>
+                            <span class="stats__text">Полезные материалы</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stats__item">
+                            <span class="stats__num">50</span>
+                            <span class="stats__text">Новости</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -251,9 +272,28 @@
     </div>
 </section>
             </main>
-            <footer class="footer">
+            <section id="recruit" class="section section__recruit">
+    <div class="section__inner">
+        <div class="container">
+            <div class="section__content recruit__content">
+                <div class="recruit__text">
+                    Присоединиться к проекту
+                </div>
+                <div class="recruit__btn">
+                    <button class="btn-reset">Войти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
     <div class="container">
-        А это футер
+        <div class="footer__content">
+            <span class="footer__copy">
+                &#169; 2020 НКОХАБ
+            </span>
+        </div>
     </div>
 </footer>
         </div>

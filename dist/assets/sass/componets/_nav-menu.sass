@@ -52,5 +52,17 @@
     cursor: pointer
     min-height: 400px
 
+    &__text,
+    &__text-close
+        margin-bottom: 10px
+
     &__text-close
         display: none
+
+.burger
+    --burger-width: 40px
+    --burger-height: 20px
+    --burger-line-height: 4px
+    --burger-color: $accent-color
+
+    @include burger

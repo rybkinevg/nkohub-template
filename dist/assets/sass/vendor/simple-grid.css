@@ -32,3 +32,15 @@
 .-cols-10 .col { flex: 0 0 calc((100% / 12) * calc(12 / 10)); }
 .-cols-11 .col { flex: 0 0 calc((100% / 12) * calc(12 / 11)); }
 .-cols-12 .col { flex: 0 0 calc((100% / 12) * calc(12 / 12)); }
+
+@media (max-width: 992px) {
+    .-cols-2 .col { flex: 0 0 calc((100% / 12) * calc(12 / 1)); }
+    .-cols-3 .col { flex: 0 0 calc((100% / 12) * calc(12 / 2)); }
+    .-cols-4 .col { flex: 0 0 calc((100% / 12) * calc(12 / 3)); }
+}
+
+@media (max-width: 650px) {
+    .-cols-2 .col { flex: 0 0 calc((100% / 12) * calc(12 / 1)); }
+    .-cols-3 .col { flex: 0 0 calc((100% / 12) * calc(12 / 1)); }
+    .-cols-4 .col { flex: 0 0 calc((100% / 12) * calc(12 / 1)); }
+}
