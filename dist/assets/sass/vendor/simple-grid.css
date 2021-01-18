@@ -17,10 +17,7 @@
 
 .col {
     padding: 0 calc(var(--gutter) / 2);
-}
-
-.col .-cell {
-    margin-bottom: var(--container-padding);
+    margin-bottom: calc(var(--container-padding) * 2);
 }
 
 .-cols-1 .col { flex: 0 0 calc((100% / 12) * calc(12 / 1)); }

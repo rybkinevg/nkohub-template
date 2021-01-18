@@ -8,6 +8,8 @@
 @import "./componets/_section"
 
 @import "./componets/index/_section-about"
+@import "./componets/index/_section-grants"
+@import "./componets/index/_section-news"
 
 // CUSTOM COMPONENTS STYLES
 // .burger {
@@ -36,8 +38,14 @@ html
 *::after
     box-sizing: inherit
 
-img
+.img
     max-width: 100%
+
+    &-flexible
+        width: 100%
+        height: 100%
+        object-fit: cover
+        display: block
 
 .ul-reset
     list-style: none
