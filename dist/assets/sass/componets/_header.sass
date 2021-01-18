@@ -1,5 +1,3 @@
-$sidebar-width: 80px
-
 .header
 
     &__title
@@ -28,30 +26,9 @@ $sidebar-width: 80px
             left: 0
             z-index: 1
 
-    &__nav,
     &__brand
         position: relative
-        z-index: 2
-
-    &__sidenav
-        position: fixed
-        top: 0
-        left: 0
-        min-width: 60px
-        height: 100vh
-        background-color: #222
-
-    &__nav-content
-        display: none // !!!
-        position: fixed
-        top: 0
-        left: 0
-        width: 100%
-        height: 100vh
-        padding-left: 60px
-        background-color: rgba(0,0,0,0.2)
-
-    &__brand
+        z-index: $z_header
         width: 100%
         height: 100%
         display: flex

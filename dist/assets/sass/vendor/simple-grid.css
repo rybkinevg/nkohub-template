@@ -19,6 +19,10 @@
     padding: 0 calc(var(--gutter) / 2);
 }
 
+.col .-cell {
+    margin-bottom: var(--container-padding);
+}
+
 .-cols-1 .col { flex: 0 0 calc((100% / 12) * calc(12 / 1)); }
 .-cols-2 .col { flex: 0 0 calc((100% / 12) * calc(12 / 2)); }
 .-cols-3 .col { flex: 0 0 calc((100% / 12) * calc(12 / 3)); }
