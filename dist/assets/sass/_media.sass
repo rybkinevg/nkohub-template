@@ -6,9 +6,24 @@
     .nav-menu__sidenav
         width: 100%
         height: $sidenav-width
+        padding: 0 15px
+        display: flex
+        justify-content: space-between
+        align-items: center
+
+    .nav-menu__logo
+        display: block
 
     .nav-trigger
         min-height: auto
+        height: 100%
+        width: 100%
+        align-items: flex-end
+
+        &__text,
+        &__text-close
+            font-size: 0
+            margin: 0
 
     .nav-menu__content
         padding: 90px 0 60px 0
@@ -20,6 +35,12 @@
     .header__brand-title
         width: auto
         text-align: left
+
+    .services__desc
+        flex: 1 1 auto
+
+    .services__list
+        display: none
 
     .footer__content
         text-align: center
